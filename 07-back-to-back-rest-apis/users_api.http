@@ -1,0 +1,35 @@
+### Health check (replace with your real URL)
+GET {{baseUrl}}/ords/poc/v1/health
+
+### Create user
+POST {{baseUrl}}/ords/poc/v1/users
+Content-Type: application/json
+X-Correlation-Id: {{$guid}}
+
+{
+  "email": "ana@example.com",
+  "firstName": "Ana",
+  "lastName": "Lopez",
+  "status": "ACTIVE"
+}
+
+### Update user
+PUT {{baseUrl}}/ords/poc/v1/users/101
+Content-Type: application/json
+X-Correlation-Id: {{$guid}}
+
+{
+  "firstName": "Ana Maria",
+  "lastName": "Lopez",
+  "status": "INACTIVE"
+}
+
+### Invalid payload (expect 400)
+POST {{baseUrl}}/ords/poc/v1/users
+Content-Type: application/json
+X-Correlation-Id: {{$guid}}
+
+{
+  "firstName": "NoEmail",
+  "lastName": "User"
+}

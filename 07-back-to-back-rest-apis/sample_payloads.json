@@ -1,0 +1,22 @@
+{
+  "postUserRequest": {
+    "email": "ana@example.com",
+    "firstName": "Ana",
+    "lastName": "Lopez",
+    "status": "ACTIVE"
+  },
+  "putUserRequest": {
+    "firstName": "Ana Maria",
+    "lastName": "Lopez",
+    "status": "INACTIVE"
+  },
+  "errorResponseExample": {
+    "errorCode": "USR_001",
+    "message": "Email is required",
+    "details": [
+      "Field email must not be null"
+    ],
+    "correlationId": "11111111-2222-3333-4444-555555555555",
+    "timestamp": "2026-02-17T10:01:00Z"
+  }
+}
