@@ -15,15 +15,12 @@ async function loginToApex(page) {
 
   await page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
 
-  // APEX login pages vary by app. These selectors cover common patterns.
-  const workspaceInput =
-    page.locator('input[name*="WORKSPACE" i], input#P9999_WORKSPACE, input#P101_WORKSPACE').first();
-  const userInput =
-    page.locator('input[name*="USERNAME" i], input#P9999_USERNAME, input#P101_USERNAME').first();
-  const passInput =
-    page.locator('input[type="password"], input[name*="PASSWORD" i], input#P9999_PASSWORD, input#P101_PASSWORD').first();
+  // Prefer accessibility-based selectors (APEX often has hidden *LABEL inputs).
+  const workspaceInput = page.getByRole('textbox', { name: /^workspace$/i });
+  const userInput = page.getByRole('textbox', { name: /^database username$/i });
+  const passInput = page.getByRole('textbox', { name: /^password$/i });
 
-  if (await workspaceInput.count()) await workspaceInput.fill(workspace);
+  await workspaceInput.fill(workspace);
   await userInput.fill(username);
   await passInput.fill(password);
 
