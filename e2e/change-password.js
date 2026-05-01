@@ -49,7 +49,7 @@ export async function changePasswordFromEnv(page) {
     await page.locator('#F4350_P56_WEB_PASSWORD').fill(newPassword);
 
     //fill the confirm password input
-    await page.locator('#"F4350_P56_USER_PASSWORD"').fill(newPassword);
+    await page.locator('#F4350_P56_USER_PASSWORD').fill(newPassword);
 
     //click the apply changes button
     await page.getByRole('button', { name: 'Apply Changes' }).click();
