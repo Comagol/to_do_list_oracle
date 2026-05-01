@@ -8,8 +8,8 @@
   "scripts": {
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "apex:create-user": "playwright test e2e/apex-admin.spec.js -g \"create user\"",
-    "apex:unlock-user": "playwright test e2e/apex-admin.spec.js -g \"unlock user\"",
-    "apex:change-password": "playwright test e2e/apex-admin.spec.js -g \"change password\""
+    "apex:create-user": "playwright test create-user.spec.js",
+    "apex:unlock-user": "playwright test unlock-user.spec.js",
+    "apex:change-password": "playwright test change-password.spec.js"
   }
 }
