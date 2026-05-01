@@ -14,14 +14,42 @@ export async function unlockUserFromEnv(page) {
 
   const targetUsername = requiredEnv('APEX_TARGET_USERNAME');
 
-
+    //go to the login page
     await page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
 
+    //get the workspace, username, and password inputs
+    const workspaceInput = page.getByRole('textbox', { name: /^workspace$/i });
+    const userInput = page.getByRole('textbox', { name: /^database username$/i });
+    const passInput = page.getByRole('textbox', { name: /^password$/i });
+
+
     //fill the workspace, username, and password
-    await page.locator('input#F4350_P52_WORKSPACE').fill(workspace);
-    await page.locator('input#F4350_P52_USER_NAME').fill(username);
-    await page.locator('input#F4350_P52_WEB_PASSWORD').fill(password);
-    await page.locator('button#B63568042920578435').click();
+    await workspaceInput.fill(workspace);
+    await userInput.fill(username);
+    await passInput.fill(password);
+
+    //click the sign in button
+    await Promise.all([
+        page.waitForLoadState('networkidle').catch(() => {}),
+        page.getByRole('button', { name: /sign in|log in|login/i }).first().click().catch(async () => {
+            await page.locator('button[type="submit"], input[type="submit"]').first().click();
+        }),
+    ]);
+
+    //click the administration button
+    await page.getByRole('button', { name: 'Administration' }).click();
+
+    //click the manage users and groups button
+    await page.getByRole('menuitem', { name: 'Manage Users and Groups' }).click();
+
+    //click the specific user link
+    await page.getByRole('link', { name: targetUsername }).click();
+
+    //select the account availability option
+    await page.getByLabel('Account Availability', { exact: true }).selectOption('N');
+
+    //click the apply changes button
+    await page.getByRole('button', { name: 'Apply Changes' }).click();
 }
 
 
