@@ -1,14 +1,18 @@
 ---
 description: APEX Playwright e2e layout, env vars, and npm scripts as in this repo
-globs: e2e/**/*.js
+globs:
+  - to_do_list_oracle/e2e/**/*.js
+  - e2e/**/*.js
 alwaysApply: false
 ---
 
 # APEX Playwright `e2e/`
 
+`globs` are **path patterns**, not files. Use **`to_do_list_oracle/e2e/**/*.js`** when the workspace root is the parent folder (e.g. `TO_DO/`). Use **`e2e/**/*.js`** when the workspace root is **`to_do_list_oracle/`** itself.
+
 ## Layout
 
-- `playwright.config.js` sets `testDir: './e2e'` and loads `.env` via `dotenv`.
+- `to_do_list_oracle/playwright.config.js` sets `testDir: './e2e'` (relative to that package root) and loads `.env` via `dotenv`.
 - Each flow: a **`.spec.js`** file defines `test(...)` and imports a **`.js`** helper that exports `*FromEnv(page)`.
 - Helpers start with `import 'dotenv/config'`, use a local `requiredEnv(name)` that throws if `process.env[name]` is missing, then read only the variables that flow uses.
 
@@ -19,7 +23,7 @@ alwaysApply: false
 - `npm run apex:change-password` → `playwright test change-password.spec.js`
 - `npm run test:e2e` / `npm run test:e2e:ui` → all tests / UI mode
 
-Run these from the repo root that contains `package.json` and `playwright.config.js`.
+Run these from **`to_do_list_oracle/`** (the folder that contains `package.json` and `playwright.config.js`).
 
 ## Environment variables (as read in code)
 
