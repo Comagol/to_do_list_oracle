@@ -1,11 +1,7 @@
 ---
 description: APEX Playwright e2e layout, env vars, and npm scripts as in this repo
-globs:
-  - to_do_list_oracle/e2e/**/*.js
-  - e2e/**/*.js
 alwaysApply: false
 ---
-
 # APEX Playwright `e2e/`
 
 `globs` are **path patterns**, not files. Use **`to_do_list_oracle/e2e/**/*.js`** when the workspace root is the parent folder (e.g. `TO_DO/`). Use **`e2e/**/*.js`** when the workspace root is **`to_do_list_oracle/`** itself.
