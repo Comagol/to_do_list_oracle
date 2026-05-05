@@ -27,7 +27,7 @@ test('test', async ({ page }) => {
   await page.getByRole('textbox', { name: 'Search' }).click();
   await page.getByRole('button', { name: 'Search', exact: true }).click();
   await page.locator('.ui-dialog.ui-dialog-popuplov > .ui-resizable-handle.ui-resizable-e').click();
-  await page.getByRole('option', { name: 'EMP (table)' }).click();
+  await page.getByRole('option', { name: 'table-pass-by-parameter' }).click();
   await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('button', { name: 'Next ' }).click();
   await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('button', { name: 'Create Page' }).click();
 });
