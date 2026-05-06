@@ -1,4 +1,13 @@
-import { test, expect } from '@playwright/test';
+import 'dotenv/config';
+
+function requiredEnv(name) {
+  const value = process.env[name];
+  if (!value) throw new Error(`Missing required env var: ${name}`);
+  return value;
+}
+
+
+//import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
   await page.goto('https://g72e895f580b78d-du9gypcf1cci20nt.adb.sa-saopaulo-1.oraclecloudapps.com/ords/r/apex/workspace-sign-in/oracle-apex-sign-in?session=114647267361122');
