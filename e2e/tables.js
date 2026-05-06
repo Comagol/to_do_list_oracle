@@ -6,9 +6,31 @@ function requiredEnv(name) {
   return value;
 }
 
+export async function createTableFromEnv(page) {
+  const loginUrl = requiredEnv('APEX_LOGIN_URL');
+  const workspace = requiredEnv('APEX_WORKSPACE');
+  const username = requiredEnv('APEX_USERNAME');
+  const password = requiredEnv('APEX_PASSWORD');
+
+  const tableName = requiredEnv('APEX_TABLE_NAME');
+  
+  //go to login page
+  await page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
+
+  //fill workspace, username, and password
+  await page.getByRole('textbox', { name: 'Workspace' }).fill(workspace);
+  await page.getByRole('textbox', { name: 'Database Username' }).fill(username);
+  await page.getByRole('textbox', { name: 'Password' }).fill(password);
+
+  //click sign in button
+  await page.getByRole('button', { name: 'Sign In' }).click();
+
+}
+
 
 //import { test, expect } from '@playwright/test';
-
+/*
+comment all steps in the test below
 test('test', async ({ page }) => {
   await page.goto('https://g72e895f580b78d-du9gypcf1cci20nt.adb.sa-saopaulo-1.oraclecloudapps.com/ords/r/apex/workspace-sign-in/oracle-apex-sign-in?session=114647267361122');
   await page.getByRole('textbox', { name: 'Workspace' }).click();
@@ -40,3 +62,4 @@ test('test', async ({ page }) => {
   await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('button', { name: 'Next ' }).click();
   await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('button', { name: 'Create Page' }).click();
 });
+*/
