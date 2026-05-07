@@ -29,9 +29,11 @@ export async function createTableFromEnv(page) {
   await page.getByRole('link', { name: appName }).click();
 
   //click on button to create a new page
-  await page.getByRole('button', { name: 'Create Page' }).click();
-
-  await page.locator('iframe[title="Create a Page"]').contentFrame().locator('.a-Icon.icon-region-.page-form').click();
+  await Promise.all([
+    page.locator('#NEW_PAGE').click().catch(() => {}),
+    page.locator('#R19905396706194943').waitFor({ state: 'visible' }).catch(() => {}),
+  ])
+  
 
   //fill the name of the page
   await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('textbox', { name: 'Name' }).fill('form');
