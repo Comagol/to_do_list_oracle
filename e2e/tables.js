@@ -39,6 +39,10 @@ export async function createTableFromEnv(page) {
   await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('combobox', { name: 'Table / View Name' }).fill(tableName);
   await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('switch', { name: 'Use Navigation' }).uncheck();
   await page.locator('iframe[title="Create a Page"]').contentFrame().locator('.a-Switch-toggle').first().click();
+  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('switch', { name: 'Use Breadcrumb' }).uncheck();
+  await page.locator('iframe[title="Create a Page"]').contentFrame().locator('.a-Switch-toggle').first().click();
+  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('button', { id: 'NEXT' }).click();
+
 }
 
 
