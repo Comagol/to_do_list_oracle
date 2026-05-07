@@ -13,7 +13,7 @@ export async function createTableFromEnv(page) {
   const password = requiredEnv('APEX_PASSWORD');
 
   const tableName = requiredEnv('APEX_TABLE_NAME');
-  
+  const appName = requiredEnv('APEX_APP_NAME');
   //go to login page
   await page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
 
@@ -25,6 +25,20 @@ export async function createTableFromEnv(page) {
   //click sign in button
   await page.getByRole('button', { name: 'Sign In' }).click();
 
+  //search and click on the app
+  await page.getByRole('link', { name: appName }).click();
+
+  //click on button to create a new page
+  await page.getByRole('button', { name: 'Create Page' }).click();
+
+  await page.locator('iframe[title="Create a Page"]').contentFrame().locator('.a-Icon.icon-region-.page-form').click();
+
+  //fill the name of the page
+  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('textbox', { name: 'Name' }).fill('form');
+  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('combobox', { name: 'Table / View Name' }).click();
+  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('combobox', { name: 'Table / View Name' }).fill(tableName);
+  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('switch', { name: 'Use Navigation' }).uncheck();
+  await page.locator('iframe[title="Create a Page"]').contentFrame().locator('.a-Switch-toggle').first().click();
 }
 
 
