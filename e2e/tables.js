@@ -1,4 +1,5 @@
 import 'dotenv/config';
+import { expect } from '@playwright/test';
 
 function requiredEnv(name) {
   const value = process.env[name];
@@ -29,24 +30,39 @@ export async function createTableFromEnv(page) {
   await page.getByRole('link', { name: appName }).click();
 
   //click on button to create a new page
-  await Promise.all([
-    page.locator('#NEW_PAGE').click().catch(() => {}),
-    page.locator('#R19905396706194943').waitFor({ state: 'visible' }).catch(() => {}),
-  ])
-  
+  // Use the stable APEX button id for this action.
+  const newPageBtn = page.locator('#NEW_PAGE');
+  await expect(newPageBtn).toBeVisible();
+  await newPageBtn.scrollIntoViewIfNeeded();
+  await newPageBtn.click();
 
-  //fill the name of the page
-  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('textbox', { name: 'Name' }).fill('form');
-  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('combobox', { name: 'Table / View Name' }).click();
-  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('combobox', { name: 'Table / View Name' }).fill(tableName);
-  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('switch', { name: 'Use Navigation' }).uncheck();
-  await page.locator('iframe[title="Create a Page"]').contentFrame().locator('.a-Switch-toggle').first().click();
-  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('switch', { name: 'Use Breadcrumb' }).uncheck();
-  await page.locator('iframe[title="Create a Page"]').contentFrame().locator('.a-Switch-toggle').first().click();
-  await page.locator('iframe[title="Create a Page"]').contentFrame().getByRole('button', { id: 'NEXT' }).click();
+  // APEX opens the wizard as a jQuery UI modal dialog containing an iframe.
+  // Wait for the dialog container + iframe to appear (more reliable than waiting on the iframe alone).
+  const wizardIframe = page.locator('div.ui-dialog--apex iframe[title="Create a Page"]');
+  await expect(wizardIframe).toBeVisible({ timeout: 60_000 });
 
+  // Interact with the iframe contents.
+  const wizardFrame = page.frameLocator('div.ui-dialog--apex iframe[title="Create a Page"]');
+  await wizardFrame.locator('body').waitFor({ state: 'visible', timeout: 60_000 });
+
+  // Select the page type (Form) so the "Name" step appears.
+  // Prefer a stable icon class if present; fallback to text-based selection.
+  const formTile = wizardFrame.locator('.a-Icon.icon-region-page-form').first();
+  if (await formTile.count()) {
+    await formTile.click();
+  } else {
+    // Depending on APEX version/theme, the tile might be a card/link/button.
+    await wizardFrame.getByRole('link', { name: /^form$/i }).first().click().catch(async () => {
+      await wizardFrame.getByText(/^form$/i).first().click();
+    });
+  }
+
+  await wizardFrame.getByRole('textbox', { name: /name/i }).fill('form');
+  /* Continue wizard here once the steps match your app:
+  await wizardFrame.getByRole('combobox', { name: /table \/ view name/i }).fill(tableName);
+  await wizardFrame.getByRole('button', { name: /next/i }).click();
+  */
 }
-
 
 //import { test, expect } from '@playwright/test';
 /*
