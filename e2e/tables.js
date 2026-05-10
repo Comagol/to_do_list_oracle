@@ -59,18 +59,17 @@ export async function createTableFromEnv(page) {
   // Page title — use exact "Name" (regex /name/i matches Table / View Name too).
   await wizardFrame.getByRole('textbox', { name: 'Name', exact: true }).fill('form');
 
-  // Popup LOV: open picker, search runs in a separate jQuery dialog on the main page (not inside the wizard iframe).
-  await wizardFrame.locator('#P2501_TABLE_NAME_lov_btn').click().catch(async () => {
-    await wizardFrame.getByRole('button', { name: /list of values/i }).click().catch(async () => {
-      await wizardFrame.locator('.apex-item-popup-lov').getByRole('button').first().click();
-    });
-  });
+  // Table / View Name: open LOV. "Table / View Name" appears twice (e.g. Local DB vs REST) — use the first (local) row.
+  await wizardFrame
+    .getByRole('combobox', { name: 'Table / View Name', exact: true })
+    .first()
+    .locator('xpath=following-sibling::button[contains(@class,"a-Button--popupLOV")]')
+    .click();
 
-  const lovSearch = page.getByRole('textbox', { name: 'Search' });
-  await lovSearch.fill(tableName);
-  await page.getByRole('button', { name: 'Search', exact: true }).click();
-
-  await page.locator(`li[data-id="${tableName}"][role="option"]`).click();
+  const lovDlg = page.locator('.ui-dialog.ui-dialog-popuplov');
+  await lovDlg.getByRole('textbox', { name: 'Search' }).fill(tableName);
+  await lovDlg.getByRole('button', { name: 'Search', exact: true }).click();
+  await lovDlg.locator(`li[data-id="${tableName}"][role="option"]`).click();
   await wizardFrame.getByRole('button', { name: 'Next ' }).click();
   await wizardFrame.getByRole('button', { name: 'Create Page' }).click();
   await page.waitForTimeout(10000);
