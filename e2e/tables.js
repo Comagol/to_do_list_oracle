@@ -29,20 +29,26 @@ export async function createTableFromEnv(page) {
   //search and click on the app
   await page.getByRole('link', { name: appName }).click();
 
-  //click on button to create a new page
-  // Use the stable APEX button id for this action.
-  const newPageBtn = page.locator('#NEW_PAGE');
-  await expect(newPageBtn).toBeVisible();
-  await newPageBtn.scrollIntoViewIfNeeded();
-  await newPageBtn.click();
+  // Open Create Page wizard: some skins expose #NEW_PAGE; others only expose the toolbar button.
+  const newPageById = page.locator('#NEW_PAGE');
+  const newPageByRole = page
+    .getByRole('region', { name: /buttons next to search bar of pages/i })
+    .getByRole('button', { name: /^create page$/i });
 
-  // APEX opens the wizard as a jQuery UI modal dialog containing an iframe.
-  // Wait for the dialog container + iframe to appear (more reliable than waiting on the iframe alone).
-  const wizardIframe = page.locator('div.ui-dialog--apex iframe[title="Create a Page"]');
+  if ((await newPageById.count()) > 0 && (await newPageById.isVisible())) {
+    await newPageById.scrollIntoViewIfNeeded();
+    await newPageById.click();
+  } else {
+    await expect(newPageByRole).toBeVisible();
+    await newPageByRole.scrollIntoViewIfNeeded();
+    await newPageByRole.click();
+  }
+
+  // Wizard iframe title can be "Create a Page", later steps may use other titles — match any iframe in the APEX dialog.
+  const wizardIframe = page.locator('div.ui-dialog--apex .ui-dialog-content iframe').first();
   await expect(wizardIframe).toBeVisible({ timeout: 60_000 });
 
-  // Interact with the iframe contents.
-  const wizardFrame = page.frameLocator('div.ui-dialog--apex iframe[title="Create a Page"]');
+  const wizardFrame = page.frameLocator('div.ui-dialog--apex .ui-dialog-content iframe').first();
   await wizardFrame.locator('body').waitFor({ state: 'visible', timeout: 60_000 });
 
   // Select page type "Form" (APEX IconList: li with data-value matches the page type).
@@ -50,11 +56,24 @@ export async function createTableFromEnv(page) {
   await formOption.waitFor({ state: 'visible', timeout: 30_000 });
   await formOption.click();
 
-  await wizardFrame.getByRole('textbox', { name: /name/i }).fill('form');
-  /* Continue wizard here once the steps match your app:
-  await wizardFrame.getByRole('combobox', { name: /table \/ view name/i }).fill(tableName);
-  await wizardFrame.getByRole('button', { name: /next/i }).click();
-  */
+  // Page title — use exact "Name" (regex /name/i matches Table / View Name too).
+  await wizardFrame.getByRole('textbox', { name: 'Name', exact: true }).fill('form');
+
+  // Popup LOV: open picker, search runs in a separate jQuery dialog on the main page (not inside the wizard iframe).
+  await wizardFrame.locator('#P2501_TABLE_NAME_lov_btn').click().catch(async () => {
+    await wizardFrame.getByRole('button', { name: /list of values/i }).click().catch(async () => {
+      await wizardFrame.locator('.apex-item-popup-lov').getByRole('button').first().click();
+    });
+  });
+
+  const lovSearch = page.getByRole('textbox', { name: 'Search' });
+  await lovSearch.fill(tableName);
+  await page.getByRole('button', { name: 'Search', exact: true }).click();
+
+  await page.locator(`li[data-id="${tableName}"][role="option"]`).click();
+  await wizardFrame.getByRole('button', { name: 'Next ' }).click();
+  await wizardFrame.getByRole('button', { name: 'Create Page' }).click();
+  await page.waitForTimeout(10000);
 }
 
 //import { test, expect } from '@playwright/test';
