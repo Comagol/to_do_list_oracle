@@ -45,17 +45,10 @@ export async function createTableFromEnv(page) {
   const wizardFrame = page.frameLocator('div.ui-dialog--apex iframe[title="Create a Page"]');
   await wizardFrame.locator('body').waitFor({ state: 'visible', timeout: 60_000 });
 
-  // Select the page type (Form) so the "Name" step appears.
-  // Prefer a stable icon class if present; fallback to text-based selection.
-  const formTile = wizardFrame.locator('.a-Icon.icon-region-page-form').first();
-  if (await formTile.count()) {
-    await formTile.click();
-  } else {
-    // Depending on APEX version/theme, the tile might be a card/link/button.
-    await wizardFrame.getByRole('link', { name: /^form$/i }).first().click().catch(async () => {
-      await wizardFrame.getByText(/^form$/i).first().click();
-    });
-  }
+  // Select page type "Form" (APEX IconList: li with data-value matches the page type).
+  const formOption = wizardFrame.locator('li[data-value="FORM"]');
+  await formOption.waitFor({ state: 'visible', timeout: 30_000 });
+  await formOption.click();
 
   await wizardFrame.getByRole('textbox', { name: /name/i }).fill('form');
   /* Continue wizard here once the steps match your app:
