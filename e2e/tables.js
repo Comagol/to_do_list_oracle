@@ -15,6 +15,7 @@ export async function createTableFromEnv(page) {
 
   const tableName = requiredEnv('APEX_TABLE_NAME');
   const appName = requiredEnv('APEX_APP_NAME');
+  const pageName = requiredEnv('APEX_PAGE_NAME');
   //go to login page
   await page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
 
@@ -57,7 +58,7 @@ export async function createTableFromEnv(page) {
   await formOption.click();
 
   // Page title — use exact "Name" (regex /name/i matches Table / View Name too).
-  await wizardFrame.getByRole('textbox', { name: 'Name', exact: true }).fill('form');
+  await wizardFrame.getByRole('textbox', { name: 'Name', exact: true }).fill(pageName);
 
   // Table / View Name: open LOV. "Table / View Name" appears twice (e.g. Local DB vs REST) — use the first (local) row.
   await wizardFrame
