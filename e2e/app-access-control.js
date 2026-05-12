@@ -36,15 +36,15 @@ export async function createAppAccessControlFromEnv(page) {
     //search and click on application access control
     await page.getByText('Application Access Control').click();
 
-    //search and click on add user role assignment
-    await page.getByText('Add User Role Assignment').click();
-
-    //expect the page to show the popup
-    //await expect(page.getByText('User Assignment')).toBeVisible();
-
-    //fill the user name input
+    // Region tabs: ensure the assignments panel is active, then click only that panel's button
+    // (avoids flaky matches when APEX keeps multiple regions in the DOM or the strip is mid-transition).
+    await page.getByRole('tab', { name: 'User Role Assignments' }).click();
+    const assignmentsPanel = page.getByRole('tabpanel', { name: 'User Role Assignments' });
+    const addAssignment = assignmentsPanel.getByRole('button', { name: 'Add User Role Assignment' });
+    await expect(addAssignment).toBeVisible({ timeout: 30_000 });
+    await addAssignment.click();
     await page.getByRole('textbox', { name: 'User Name' }).fill(appAccessControlUserName);
 
-    //click the apply changes button
-    await page.waitForTimeout(10000);
+    //click the create assignment button
+    await page.getByRole('button', { name: 'Create Assignment' }).click();
   }
