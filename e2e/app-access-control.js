@@ -36,4 +36,13 @@ export async function createAppAccessControlFromEnv(page) {
     //search and click on application access control
     await page.getByText('Application Access Control').click();
 
+    //search and click on add user role assignment
+    await expect(page.getByText('Add User Role Assignment')).toBeVisible();
+    await page.getByText('Add User Role Assignment').click();
+
+    //expect the page to show the popup
+    await expect(page.getByText('User Assignment')).toBeVisible();
+
+    //click the apply changes button
+    await page.waitForTimeout(10000);
   }
