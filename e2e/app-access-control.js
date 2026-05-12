@@ -43,8 +43,12 @@ export async function createAppAccessControlFromEnv(page) {
     const addAssignment = assignmentsPanel.getByRole('button', { name: 'Add User Role Assignment' });
     await expect(addAssignment).toBeVisible({ timeout: 30_000 });
     await addAssignment.click();
-    await page.getByRole('textbox', { name: 'User Name' }).fill(appAccessControlUserName);
 
-    //click the create assignment button
-    await page.getByRole('button', { name: 'Create Assignment' }).click();
+    const assignmentDialog = page.getByRole('dialog', { name: 'User Assignment' });
+    await expect(assignmentDialog).toBeVisible({ timeout: 30_000 });
+    const assignmentFrame = assignmentDialog.frameLocator('iframe');
+
+    await assignmentFrame.getByRole('textbox', { name: 'User Name', exact: true }).fill(appAccessControlUserName);
+    await page.waitForTimeout(10000);
+    await assignmentFrame.getByRole('button', { name: 'Create Assignment' }).click();
   }
