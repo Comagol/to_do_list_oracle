@@ -29,4 +29,11 @@ export async function createAppAccessControlFromEnv(page) {
     //search and click on the app
     await page.getByRole('link', { name: appName }).click();
 
-}
+
+    //search and click on shared components
+    await page.getByText('Shared Components').click();
+
+    //search and click on application access control
+    await page.getByText('Application Access Control').click();
+
+  }
