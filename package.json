@@ -10,6 +10,7 @@
     "test:e2e:ui": "playwright test --ui",
     "apex:create-user": "playwright test create-user.spec.js",
     "apex:unlock-user": "playwright test unlock-user.spec.js",
-    "apex:change-password": "playwright test change-password.spec.js"
+    "apex:change-password": "playwright test change-password.spec.js",
+    "apex:create-table": "playwright test tables.spec.js"
   }
 }

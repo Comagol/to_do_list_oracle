@@ -1,5 +1,8 @@
 ---
 description: APEX Playwright e2e layout, env vars, and npm scripts as in this repo
+globs:
+  - to_do_list_oracle/e2e/**/*.js
+  - e2e/**/*.js
 alwaysApply: false
 ---
 # APEX Playwright `e2e/`
@@ -17,13 +20,14 @@ alwaysApply: false
 - `npm run apex:create-user` → `playwright test create-user.spec.js`
 - `npm run apex:unlock-user` → `playwright test unlock-user.spec.js`
 - `npm run apex:change-password` → `playwright test change-password.spec.js`
+- `npm run apex:create-table` → `playwright test tables.spec.js`
 - `npm run test:e2e` / `npm run test:e2e:ui` → all tests / UI mode
 
 Run these from **`to_do_list_oracle/`** (the folder that contains `package.json` and `playwright.config.js`).
 
 ## Environment variables (as read in code)
 
-**Shared login** (`create-user.js`, `unlock-user.js`, `change-password.js`):
+**Shared login** (`create-user.js`, `unlock-user.js`, `change-password.js`, `tables.js`):
 
 - `APEX_LOGIN_URL`, `APEX_WORKSPACE`, `APEX_USERNAME`, `APEX_PASSWORD`
 
@@ -39,6 +43,10 @@ Run these from **`to_do_list_oracle/`** (the folder that contains `package.json`
 
 - `APEX_TARGET_USERNAME`, `APEX_TARGET_NEW_PASSWORD`
 
+**Create table / Form page** (`tables.js`):
+
+- `APEX_APP_NAME`, `APEX_PAGE_NAME`, `APEX_TABLE_NAME`
+
 ## Behaviour in helpers (do not invent extra steps)
 
 - Login: `page.goto(loginUrl, { waitUntil: 'domcontentloaded' })`, fill workspace / database username / password with `getByRole('textbox', { name: /^...$/i })`, then `Promise.all` with `waitForLoadState('networkidle').catch` and sign-in button click (with submit fallback).
@@ -46,5 +54,6 @@ Run these from **`to_do_list_oracle/`** (the folder that contains `package.json`
 - **create-user.js**: APEX item locators `input#F4350_P52_USER_NAME`, `input#F4350_P52_EMAIL_ADDRESS` (fill with `.catch` if absent), password fields `input#F4350_P52_WEB_PASSWORD` / `input#F4350_P52_PASSWD_CONFIRM`, submit `button#B63568042920578435`.
 - **unlock-user.js**: `getByRole('link', { name: targetUsername })`, `getByLabel('Account Availability', { exact: true }).selectOption('N')`, `getByRole('button', { name: 'Apply Changes' })`.
 - **change-password.js**: same link to user; `page.locator('#F4350_P56_WEB_PASSWORD')` and `#F4350_P56_USER_PASSWORD` for new/confirm; **Apply Changes**.
+- **tables.js**: App Builder — open app by link → Create Page → wizard iframe → `li[data-value="FORM"]` → Name → first **Table / View Name** LOV → popup LOV search → `li[data-id=…]` → Next / Create Page.
 
 When editing flows, change **`.js`** helpers; keep **`.spec.js`** as thin wrappers unless you add assertions there.
