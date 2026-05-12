@@ -6,4 +6,21 @@ export async function createAppAccessControlFromEnv(page) {
     const workspace = requiredEnv('APEX_WORKSPACE');
     const username = requiredEnv('APEX_USERNAME');
     const password = requiredEnv('APEX_PASSWORD');
+
+    const appName = requiredEnv('APEX_APP_NAME');
+
+    //go to the login page
+    await page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
+
+    //fill the workspace, username, and password
+    await page.getByRole('textbox', { name: 'Workspace' }).fill(workspace);
+    await page.getByRole('textbox', { name: 'Database Username' }).fill(username);
+    await page.getByRole('textbox', { name: 'Password' }).fill(password);
+
+    //click the sign in button
+    await page.getByRole('button', { name: 'Sign In' }).click();
+
+    //search and click on the app
+    await page.getByRole('link', { name: appName }).click();
+
 }
