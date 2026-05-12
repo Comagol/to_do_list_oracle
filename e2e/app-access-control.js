@@ -1,6 +1,12 @@
 import 'dotenv/config';
 import { expect } from '@playwright/test';
 
+function requiredEnv(name) {
+    const value = process.env[name];
+    if (!value) throw new Error(`Missing required env var: ${name}`);
+    return value;
+  }
+
 export async function createAppAccessControlFromEnv(page) {
     const loginUrl = requiredEnv('APEX_LOGIN_URL');
     const workspace = requiredEnv('APEX_WORKSPACE');
