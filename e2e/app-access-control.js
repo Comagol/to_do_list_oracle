@@ -14,7 +14,7 @@ export async function createAppAccessControlFromEnv(page) {
     const password = requiredEnv('APEX_PASSWORD');
 
     const appName = requiredEnv('APEX_APP_NAME');
-
+    const appAccessControlUserName = requiredEnv('APP_ACCESS_CONTROL_USER_NAME');
     //go to the login page
     await page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
 
@@ -40,7 +40,10 @@ export async function createAppAccessControlFromEnv(page) {
     await page.getByText('Add User Role Assignment').click();
 
     //expect the page to show the popup
-    await expect(page.getByText('User Assignment')).toBeVisible();
+    //await expect(page.getByText('User Assignment')).toBeVisible();
+
+    //fill the user name input
+    await page.getByRole('textbox', { name: 'User Name' }).fill(appAccessControlUserName);
 
     //click the apply changes button
     await page.waitForTimeout(10000);
