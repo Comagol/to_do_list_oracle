@@ -49,6 +49,7 @@ export async function createAppAccessControlFromEnv(page) {
     const assignmentFrame = assignmentDialog.frameLocator('iframe');
 
     await assignmentFrame.getByRole('textbox', { name: 'User Name', exact: true }).fill(appAccessControlUserName);
-    await page.waitForTimeout(10000);
+    await assignmentFrame.getByRole('checkbox', { name: 'administrator' }).click();
     await assignmentFrame.getByRole('button', { name: 'Create Assignment' }).click();
+    await page.waitForTimeout(1000);
   }
