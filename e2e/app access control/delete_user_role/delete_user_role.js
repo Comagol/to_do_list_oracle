@@ -14,7 +14,7 @@ export async function deleteUserRoleFromEnv(page) {
     const password = requiredEnv('APEX_PASSWORD');
 
     const appName = requiredEnv('APEX_APP_NAME');
-    const roleName = requiredEnv('APEX_ROLE_NAME');
+    const userName = requiredEnv('APP_ACCESS_CONTROL_USER_NAME');
     
     //go to the login page
     await page.goto(loginUrl, { waitUntil: 'domcontentloaded' });
@@ -37,11 +37,15 @@ export async function deleteUserRoleFromEnv(page) {
     await page.getByText('Application Access Control').click();
 
     //search the user name and click on the user
-    await page.getByRole('textbox', { name: 'User Name' }).fill(roleName);
-    await page.getByRole('button', { name: 'Search' }).click();
-    await page.getByRole('link', { name: roleName }).click();
+    await page.getByText(userName).click();
+
+    //click on the user dialog
+    const userDialog = page.getByRole('dialog', { name: 'User' });
+    await expect(userDialog).toBeVisible({ timeout: 30_000 });
+    const userFrame = userDialog.frameLocator('iframe');
+
+    //click on the delete role button
+    await userFrame.getByRole('button', { name: 'Delete' }).click();
 
     await page.waitForTimeout(6000);
-    //search the role name and click on the role
-    
 }
