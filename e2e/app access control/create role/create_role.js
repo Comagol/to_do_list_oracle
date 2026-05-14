@@ -35,4 +35,17 @@ export async function createRoleFromEnv(page) {
 
     //search and click on application access control
     await page.getByText('Application Access Control').click();
+
+    //search and click on add roles
+    await page.getByText('Add Role').click();
+    
+
+    const roleDialog = page.getByRole('dialog', { name: 'Role' });
+    await expect(roleDialog).toBeVisible({ timeout: 30_000 });
+    const roleFrame = roleDialog.frameLocator('iframe');
+
+    await roleFrame.getByRole('textbox', { name: 'Name' }).fill(roleName);
+    await roleFrame.getByRole('textbox', { name: 'Static Identifier' }).fill(roleName);
+    await roleFrame.getByRole('button', { name: 'Create Role' }).click();
+    await page.waitForTimeout(1000);
 }
