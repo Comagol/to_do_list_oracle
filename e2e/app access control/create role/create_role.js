@@ -25,4 +25,14 @@ export async function createRoleFromEnv(page) {
     await page.getByRole('textbox', { name: 'Password' }).fill(password);
     
     //click the sign in button
+    await page.getByRole('button', { name: 'Sign In' }).click();
+
+    //search and click on the app
+    await page.getByRole('link', { name: appName }).click();
+
+    //search and click on shared components
+    await page.getByText('Shared Components').click();
+
+    //search and click on application access control
+    await page.getByText('Application Access Control').click();
 }
