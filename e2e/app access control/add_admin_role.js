@@ -7,7 +7,7 @@ function requiredEnv(name) {
     return value;
   }
 
-export async function createAppAccessControlFromEnv(page) {
+export async function addAdminRoleFromEnv(page) {
     const loginUrl = requiredEnv('APEX_LOGIN_URL');
     const workspace = requiredEnv('APEX_WORKSPACE');
     const username = requiredEnv('APEX_USERNAME');
