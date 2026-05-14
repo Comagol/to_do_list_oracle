@@ -47,5 +47,10 @@ export async function deleteUserRoleFromEnv(page) {
     //click on the delete role button
     await userFrame.getByRole('button', { name: 'Delete' }).click();
 
+    //click on the ok button
+    const okButton = page.getByRole('button', { name: 'OK' });
+    await expect(okButton).toBeVisible({ timeout: 30_000 });
+    await okButton.click();
+
     await page.waitForTimeout(6000);
 }
