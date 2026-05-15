@@ -1,0 +1,5 @@
+staticFile app-icon-32 (
+    name: app-icon-32.png
+    mimeType: image/png
+    filePath: icons/app-icon-32.png
+)

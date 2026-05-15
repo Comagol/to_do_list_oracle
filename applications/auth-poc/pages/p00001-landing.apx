@@ -1,0 +1,158 @@
+page 1 (
+    name: Landing
+    alias: LANDING
+    title: Access Request
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authentication: public
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+    pageGroup: @authentication
+
+    region page-header (
+        name: Access Request
+        title: Request Application Access
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/hero
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region access-request-form (
+        name: Access Request Form
+        title: Submit your details
+        type: staticContent
+        layout {
+            sequence: 20
+            slot: contentBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    pageItem P1_EMAIL (
+        type: textField
+        label {
+            label: Email
+        }
+        layout {
+            sequence: 10
+            region: @access-request-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/required-floating
+            templateOptions: #DEFAULT#
+            icon: fa-envelope
+        }
+        validation {
+            maxLength: 255
+            valueRequired: true
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P1_FIRST_NAME (
+        type: textField
+        label {
+            label: First Name
+        }
+        layout {
+            sequence: 20
+            region: @access-request-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        validation {
+            maxLength: 100
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    pageItem P1_LAST_NAME (
+        type: textField
+        label {
+            label: Last Name
+        }
+        layout {
+            sequence: 30
+            region: @access-request-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        validation {
+            maxLength: 100
+        }
+        sessionState {
+            storage: request
+        }
+    )
+
+    button submit-request (
+        buttonName: SUBMIT_REQUEST
+        label: Submit Access Request
+        layout {
+            sequence: 10
+            region: @access-request-form
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            hot: true
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: submit
+            warnOnUnsavedChanges: doNotCheck
+        }
+    )
+
+    process insert-access-request (
+        name: Insert Access Request
+        type: executeCode
+        source {
+            plsqlCode:
+                ```plsql
+                INSERT INTO xx_user_access_request
+                    (email, first_name, last_name, sso_provider, sso_subject_id)
+                VALUES
+                    (:P1_EMAIL, :P1_FIRST_NAME, :P1_LAST_NAME, :G_SSO_PROVIDER, :G_SSO_SUBJECT_ID);
+                ```
+        }
+        execution {
+            sequence: 10
+        }
+        serverSideCondition {
+            type: requestEqualsValue
+            value: SUBMIT_REQUEST
+        }
+        success {
+            message: Your access request has been submitted. An administrator will review it shortly.
+        }
+    )
+
+)

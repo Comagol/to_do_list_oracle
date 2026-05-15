@@ -1,0 +1,248 @@
+page 1001 (
+    name: Users
+    alias: USERS
+    title: Users
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authorizationScheme: @administration-rights
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+    pageGroup: @administration
+
+    region breadcrumb-region (
+        name: Breadcrumb
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/breadcrumb-bar-region
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region users-report (
+        name: Users
+        type: interactiveReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                SELECT
+                    u.id,
+                    u.username,
+                    u.email,
+                    u.first_name,
+                    u.last_name,
+                    u.is_active,
+                    u.is_locked,
+                    u.last_login_at,
+                    u.failed_login_attempts,
+                    u.created_at
+                FROM xx_users u
+                ORDER BY u.username
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: contentBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        link {
+            linkColumn: customTarget
+            target: {
+                page: 1002
+                items: {
+                    P1002_ID: #ID#
+                }
+                clearCache: 1002
+                action: resetPagination
+            }
+            linkIcon: <span role="img" aria-label="Edit" class="fa fa-edit" title="Edit"></span>
+        }
+
+        column ID (
+            type: hidden
+            heading {
+                heading: ID
+            }
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: ID
+                dataType: number
+            }
+        )
+
+        column USERNAME (
+            type: textField
+            heading {
+                heading: Username
+            }
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: USERNAME
+                dataType: varchar2
+            }
+        )
+
+        column EMAIL (
+            type: textField
+            heading {
+                heading: Email
+            }
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: EMAIL
+                dataType: varchar2
+            }
+        )
+
+        column FIRST_NAME (
+            type: textField
+            heading {
+                heading: First Name
+            }
+            layout {
+                sequence: 40
+            }
+            source {
+                databaseColumn: FIRST_NAME
+                dataType: varchar2
+            }
+        )
+
+        column LAST_NAME (
+            type: textField
+            heading {
+                heading: Last Name
+            }
+            layout {
+                sequence: 50
+            }
+            source {
+                databaseColumn: LAST_NAME
+                dataType: varchar2
+            }
+        )
+
+        column IS_ACTIVE (
+            type: textField
+            heading {
+                heading: Active
+            }
+            layout {
+                sequence: 60
+            }
+            source {
+                databaseColumn: IS_ACTIVE
+                dataType: varchar2
+            }
+        )
+
+        column IS_LOCKED (
+            type: textField
+            heading {
+                heading: Locked
+            }
+            layout {
+                sequence: 70
+            }
+            source {
+                databaseColumn: IS_LOCKED
+                dataType: varchar2
+            }
+        )
+
+        column LAST_LOGIN_AT (
+            type: textField
+            heading {
+                heading: Last Login
+            }
+            layout {
+                sequence: 80
+            }
+            source {
+                databaseColumn: LAST_LOGIN_AT
+                dataType: timestamp
+            }
+        )
+
+        column FAILED_LOGIN_ATTEMPTS (
+            type: textField
+            heading {
+                heading: Failed Attempts
+            }
+            layout {
+                sequence: 90
+            }
+            source {
+                databaseColumn: FAILED_LOGIN_ATTEMPTS
+                dataType: number
+            }
+        )
+
+        column CREATED_AT (
+            type: textField
+            heading {
+                heading: Created
+            }
+            layout {
+                sequence: 100
+            }
+            source {
+                databaseColumn: CREATED_AT
+                dataType: timestamp
+            }
+        )
+
+        savedReport primary-report (
+            visibility: primaryDefault
+            name: Primary Report
+        )
+
+    )
+
+    button create-user (
+        buttonName: CREATE_USER
+        label: Create User
+        layout {
+            sequence: 10
+            region: @users-report
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            hot: true
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirect
+            target: {
+                page: 1002
+                clearCache: 1002
+            }
+        }
+    )
+
+)

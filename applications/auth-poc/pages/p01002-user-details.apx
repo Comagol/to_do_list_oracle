@@ -1,0 +1,452 @@
+page 1002 (
+    name: User Details
+    alias: USER-DETAILS
+    title: User Details
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authorizationScheme: @administration-rights
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+    pageGroup: @administration
+
+    region breadcrumb-region (
+        name: Breadcrumb
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/breadcrumb-bar-region
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region user-form (
+        name: User Details
+        type: form
+        source {
+            location: localDatabase
+            type: table
+            tableName: XX_USERS
+            primaryKeyColumn: ID
+        }
+        layout {
+            sequence: 20
+            slot: contentBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    pageItem P1002_ID (
+        type: hidden
+        layout {
+            sequence: 10
+            region: @user-form
+            slot: regionBody
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: ID
+            dataType: number
+            primaryKey: true
+        }
+    )
+
+    pageItem P1002_USERNAME (
+        type: textField
+        label {
+            label: Username
+        }
+        layout {
+            sequence: 20
+            region: @user-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/required-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: USERNAME
+            dataType: varchar2
+        }
+        validation {
+            maxLength: 100
+            valueRequired: true
+        }
+    )
+
+    pageItem P1002_EMAIL (
+        type: textField
+        label {
+            label: Email
+        }
+        layout {
+            sequence: 30
+            region: @user-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/required-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: EMAIL
+            dataType: varchar2
+        }
+        validation {
+            maxLength: 255
+            valueRequired: true
+        }
+    )
+
+    pageItem P1002_FIRST_NAME (
+        type: textField
+        label {
+            label: First Name
+        }
+        layout {
+            sequence: 40
+            region: @user-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: FIRST_NAME
+            dataType: varchar2
+        }
+        validation {
+            maxLength: 100
+        }
+    )
+
+    pageItem P1002_LAST_NAME (
+        type: textField
+        label {
+            label: Last Name
+        }
+        layout {
+            sequence: 50
+            region: @user-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: LAST_NAME
+            dataType: varchar2
+        }
+        validation {
+            maxLength: 100
+        }
+    )
+
+    pageItem P1002_BIRTH_DATE (
+        type: datePicker
+        label {
+            label: Birth Date
+        }
+        layout {
+            sequence: 60
+            region: @user-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: BIRTH_DATE
+            dataType: date
+        }
+    )
+
+    pageItem P1002_IS_ACTIVE (
+        type: switch
+        label {
+            label: Active
+        }
+        layout {
+            sequence: 70
+            region: @user-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: IS_ACTIVE
+            dataType: varchar2
+        }
+        default {
+            type: static
+            staticValue: Y
+        }
+    )
+
+    pageItem P1002_IS_LOCKED (
+        type: switch
+        label {
+            label: Locked
+        }
+        layout {
+            sequence: 80
+            region: @user-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: IS_LOCKED
+            dataType: varchar2
+        }
+        default {
+            type: static
+            staticValue: N
+        }
+    )
+
+    pageItem P1002_FORCE_PASSWORD_CHANGE (
+        type: switch
+        label {
+            label: Force Password Change
+        }
+        layout {
+            sequence: 90
+            region: @user-form
+            slot: regionBody
+        }
+        appearance {
+            template: @/optional-floating
+            templateOptions: #DEFAULT#
+        }
+        source {
+            type: databaseColumn
+            databaseColumn: FORCE_PASSWORD_CHANGE
+            dataType: varchar2
+        }
+        default {
+            type: static
+            staticValue: N
+        }
+    )
+
+    button save (
+        buttonName: SAVE
+        label: Apply Changes
+        layout {
+            sequence: 10
+            region: @user-form
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            hot: true
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: submit
+            warnOnUnsavedChanges: doNotCheck
+        }
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P1002_ID
+        }
+    )
+
+    button create (
+        buttonName: CREATE
+        label: Create User
+        layout {
+            sequence: 20
+            region: @user-form
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            hot: true
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: submit
+            warnOnUnsavedChanges: doNotCheck
+        }
+        serverSideCondition {
+            type: itemIsNull
+            item: P1002_ID
+        }
+    )
+
+    button cancel (
+        buttonName: CANCEL
+        label: Cancel
+        layout {
+            sequence: 30
+            region: @user-form
+            slot: previous
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+        }
+        behavior {
+            action: redirect
+            target: {
+                page: 1001
+            }
+        }
+    )
+
+    button delete (
+        buttonName: DELETE
+        label: Delete
+        layout {
+            sequence: 40
+            region: @user-form
+            slot: previous
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: [
+                #DEFAULT#
+                t-Button--danger
+            ]
+        }
+        behavior {
+            action: submit
+            warnOnUnsavedChanges: doNotCheck
+        }
+        confirmation {
+            message: Are you sure you want to delete this user?
+            style: danger
+        }
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P1002_ID
+        }
+    )
+
+    button unlock-account (
+        buttonName: UNLOCK_ACCOUNT
+        label: Unlock Account
+        layout {
+            sequence: 50
+            region: @user-form
+            slot: next
+        }
+        appearance {
+            buttonTemplate: @/text
+            templateOptions: #DEFAULT#
+            icon: fa-unlock
+        }
+        behavior {
+            action: submit
+            warnOnUnsavedChanges: doNotCheck
+        }
+        serverSideCondition {
+            type: itemIsNotNull
+            item: P1002_ID
+        }
+    )
+
+    process fetch-row (
+        name: Fetch Row
+        type: formInit
+        execution {
+            sequence: 10
+            point: beforeHeader
+        }
+        settings {
+            region: @user-form
+        }
+    )
+
+    process save-form (
+        name: Save Form
+        type: formDml
+        execution {
+            sequence: 20
+        }
+        settings {
+            region: @user-form
+            returnPrimaryKeyAfterInsert: true
+        }
+        serverSideCondition {
+            type: requestInList
+            list: CREATE SAVE
+        }
+        success {
+            message: User saved successfully.
+        }
+    )
+
+    process delete-user (
+        name: Delete User
+        type: formDml
+        execution {
+            sequence: 30
+        }
+        settings {
+            region: @user-form
+            dmlType: delete
+        }
+        serverSideCondition {
+            type: requestEqualsValue
+            value: DELETE
+        }
+        success {
+            message: User deleted.
+        }
+    )
+
+    process unlock-account (
+        name: Unlock Account
+        type: executeCode
+        source {
+            plsqlCode:
+                ```plsql
+                xx_auth_pkg.unlock_account(p_user_id => :P1002_ID);
+                ```
+        }
+        execution {
+            sequence: 40
+        }
+        serverSideCondition {
+            type: requestEqualsValue
+            value: UNLOCK_ACCOUNT
+        }
+        success {
+            message: Account unlocked. User will be required to change password on next login.
+        }
+    )
+
+)

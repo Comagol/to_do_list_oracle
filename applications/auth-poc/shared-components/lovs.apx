@@ -1,0 +1,65 @@
+lov boolean (
+    name: BOOLEAN
+    source {
+        location: staticValues
+    }
+
+    entry false (
+        sequence: 2
+        display: No
+        return: FALSE
+    )
+
+    entry true (
+        sequence: 1
+        display: Yes
+        return: TRUE
+    )
+
+)
+
+lov yes-no (
+    name: YES_NO
+    source {
+        location: staticValues
+    }
+
+    entry yes (
+        sequence: 1
+        display: Yes
+        return: Y
+    )
+
+    entry no (
+        sequence: 2
+        display: No
+        return: N
+    )
+
+)
+
+lov access-request-status (
+    name: ACCESS_REQUEST_STATUS
+    source {
+        location: staticValues
+    }
+
+    entry pending (
+        sequence: 1
+        display: Pending
+        return: PENDING
+    )
+
+    entry approved (
+        sequence: 2
+        display: Approved
+        return: APPROVED
+    )
+
+    entry rejected (
+        sequence: 3
+        display: Rejected
+        return: REJECTED
+    )
+
+)

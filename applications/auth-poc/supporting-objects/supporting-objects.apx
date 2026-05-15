@@ -1,0 +1,11 @@
+supportingObject (
+    install {
+        scriptFile: install-script.sql
+    }
+    deinstall {
+        scriptFile: deinstall-script.sql
+    }
+    advanced {
+        includeInAppExport: true
+    }
+)

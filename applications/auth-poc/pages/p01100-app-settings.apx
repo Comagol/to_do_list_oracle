@@ -1,0 +1,211 @@
+page 1100 (
+    name: App Settings
+    alias: APP-SETTINGS
+    title: App Settings
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authorizationScheme: @administration-rights
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+    pageGroup: @administration
+
+    region breadcrumb-region (
+        name: Breadcrumb
+        type: breadcrumb
+        source {
+            breadcrumb: @breadcrumb
+        }
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/breadcrumb-bar-region
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region app-parameters-grid (
+        name: App Parameters
+        type: interactiveGrid
+        source {
+            location: localDatabase
+            tableName: XX_APP_PARAMETERS
+        }
+        layout {
+            sequence: 20
+            slot: contentBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        edit {
+            enabled: true
+            allowedOperations: [
+                update
+                insert
+                delete
+            ]
+        }
+        toolbar {
+            controls: [
+                searchField
+                actionMenu
+                saveButton
+            ]
+        }
+
+        savedReport PRIMARY (
+            visibility: primaryDefault
+            view {
+                default: grid
+            }
+            singleRowView {
+                displayedColumns: true
+            }
+
+            displayColumn PARAMETER_NAME ()
+            displayColumn PARAMETER_VALUE ()
+            displayColumn DESCRIPTION ()
+            displayColumn UPDATED_AT ()
+            displayColumn UPDATED_BY ()
+        )
+
+        column APEX$ROW_SELECTOR (
+            type: rowSelector
+            layout {
+                sequence: 1
+            }
+        )
+
+        column APEX$ROW_ACTION (
+            type: rowAction
+            layout {
+                sequence: 2
+            }
+        )
+
+        column ID (
+            type: hidden
+            source {
+                databaseColumn: ID
+                dataType: number
+                primaryKey: true
+            }
+            layout {
+                sequence: 10
+            }
+        )
+
+        column PARAMETER_NAME (
+            type: textField
+            heading {
+                heading: Parameter Name
+            }
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: PARAMETER_NAME
+                dataType: varchar2
+            }
+            validation {
+                maxLength: 200
+            }
+        )
+
+        column PARAMETER_VALUE (
+            type: textField
+            heading {
+                heading: Value
+            }
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: PARAMETER_VALUE
+                dataType: varchar2
+            }
+            validation {
+                maxLength: 4000
+            }
+        )
+
+        column DESCRIPTION (
+            type: textField
+            heading {
+                heading: Description
+            }
+            layout {
+                sequence: 40
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+            validation {
+                maxLength: 4000
+            }
+        )
+
+        column CREATED_AT (
+            type: hidden
+            source {
+                databaseColumn: CREATED_AT
+                dataType: timestamp
+            }
+            layout {
+                sequence: 50
+            }
+        )
+
+        column CREATED_BY (
+            type: hidden
+            source {
+                databaseColumn: CREATED_BY
+                dataType: varchar2
+            }
+            layout {
+                sequence: 60
+            }
+        )
+
+        column UPDATED_AT (
+            type: textField
+            heading {
+                heading: Updated
+            }
+            layout {
+                sequence: 70
+            }
+            source {
+                databaseColumn: UPDATED_AT
+                dataType: timestamp
+            }
+        )
+
+        column UPDATED_BY (
+            type: textField
+            heading {
+                heading: Updated By
+            }
+            layout {
+                sequence: 80
+            }
+            source {
+                databaseColumn: UPDATED_BY
+                dataType: varchar2
+            }
+        )
+
+    )
+
+)

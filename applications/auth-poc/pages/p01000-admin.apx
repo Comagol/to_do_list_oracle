@@ -1,0 +1,71 @@
+page 1000 (
+    name: Admin
+    alias: ADMIN
+    title: Administration
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        authorizationScheme: @administration-rights
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+    pageGroup: @administration
+
+    region breadcrumb-bar (
+        name: Administration
+        title: Administration
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/hero
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region admin-nav (
+        name: Admin Navigation
+        type: staticContent
+        source {
+            htmlCode:
+                ```html
+                <ul class="t-Cards t-Cards--compact t-Cards--displayIcons t-Cards--3cols">
+                  <li class="t-Cards-item">
+                    <a href="f?p=&APP_ID.:1001:&APP_SESSION." class="t-Card">
+                      <div class="t-Card-wrap">
+                        <div class="t-Card-icon"><span class="t-Icon fa-users"></span></div>
+                        <div class="t-Card-titleWrap"><h3 class="t-Card-title">Users</h3></div>
+                        <div class="t-Card-body"><p>Manage application users</p></div>
+                      </div>
+                    </a>
+                  </li>
+                  <li class="t-Cards-item">
+                    <a href="f?p=&APP_ID.:1100:&APP_SESSION." class="t-Card">
+                      <div class="t-Card-wrap">
+                        <div class="t-Card-icon"><span class="t-Icon fa-sliders"></span></div>
+                        <div class="t-Card-titleWrap"><h3 class="t-Card-title">App Settings</h3></div>
+                        <div class="t-Card-body"><p>Configure application parameters</p></div>
+                      </div>
+                    </a>
+                  </li>
+                </ul>
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: contentBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+    )
+
+)
