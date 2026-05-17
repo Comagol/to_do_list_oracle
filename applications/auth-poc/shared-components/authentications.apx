@@ -2,7 +2,7 @@ authentication xx-custom-auth (
     name: XX Custom Authentication
     type: customAuthentication
     settings {
-        authenticationFunction: return xx_auth_pkg.apex_authenticate(p_username => :P9999_USERNAME, p_password => :P9999_PASSWORD);
+        authenticationFunction: apex_app_authenticate
     }
     sessionNotValid {
         redirectUrl: f?p=&APP_ID.:9999:&APP_SESSION.::&DEBUG.:::

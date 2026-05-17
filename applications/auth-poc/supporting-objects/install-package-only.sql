@@ -161,6 +161,18 @@ CREATE OR REPLACE PACKAGE BODY xx_auth_pkg AS
 END xx_auth_pkg;
 /
 
+-- Standalone auth function for APEX Custom Authentication (Authentication Function Name field).
+-- Do not put "return xx_auth_pkg..." in PL/SQL Source — APEX validation raises PLS-00488.
+CREATE OR REPLACE FUNCTION apex_app_authenticate (
+    p_username IN VARCHAR2,
+    p_password IN VARCHAR2
+) RETURN BOOLEAN
+IS
+BEGIN
+    RETURN xx_auth_pkg.authenticate(p_username, p_password);
+END apex_app_authenticate;
+/
+
 INSERT INTO xx_app_parameters (parameter_name, parameter_value, description, created_by, updated_by)
 SELECT 'FORGET_PASSWORD_TOKEN_EXPIRATION', '60', 'Token expiration in minutes for the forgot-password flow', 'SYSTEM', 'SYSTEM' FROM dual
 WHERE NOT EXISTS (SELECT 1 FROM xx_app_parameters WHERE UPPER(parameter_name) = 'FORGET_PASSWORD_TOKEN_EXPIRATION');
