@@ -1,6 +1,10 @@
 -- ============================================================
 -- Weekly Sales Operations — Supporting Objects Install
--- Run once on first install. Re-run package scripts safely.
+-- For SQL*Plus / SQLcl only (uses @@ file includes).
+--
+-- APEX SQL Scripts cannot run this file (0 statements error).
+-- In App Builder use: install-script-apex.sql instead.
+-- Or run 01 → 02 → 03 → 04 → 05 separately in order.
 -- ============================================================
 
 @@01_core_sales_schema.sql
