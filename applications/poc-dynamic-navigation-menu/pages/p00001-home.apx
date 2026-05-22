@@ -1,0 +1,180 @@
+page 1 (
+    name: Home
+    alias: HOME
+    title: Dynamic Navigation
+    appearance {
+        pageTemplate: @/standard
+        templateOptions: #DEFAULT#
+    }
+    navigation {
+        cursorFocus: doNotFocusCursor
+    }
+    security {
+        pageAccessProtection: argumentsMustHaveChecksum
+        formAutoComplete: false
+    }
+
+    region page-header (
+        name: Dynamic Navigation
+        title: Runtime Menu
+        type: staticContent
+        layout {
+            sequence: 10
+            slot: breadcrumbBar
+        }
+        appearance {
+            template: @/hero
+            templateOptions: #DEFAULT#
+        }
+    )
+
+    region runtime-menu (
+        name: Runtime Menu
+        type: interactiveReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select jt.menu_id,
+                       jt.parent_menu_id,
+                       jt.menu_label,
+                       jt.target_url,
+                       jt.icon_class,
+                       jt.css_class,
+                       jt.js_action_name,
+                       jt.js_action_payload,
+                       jt.display_sequence
+                  from json_table(
+                         pkg_navigation_menu.get_menu_tree_json(:APP_USER),
+                         '$[*]'
+                         columns (
+                             menu_id          number         path '$.menuId',
+                             parent_menu_id   number         path '$.parentMenuId',
+                             menu_label       varchar2(200)  path '$.menuLabel',
+                             target_url       varchar2(2000) path '$.targetUrl',
+                             icon_class       varchar2(200)  path '$.iconClass',
+                             css_class        varchar2(200)  path '$.cssClass',
+                             js_action_name   varchar2(128)  path '$.jsActionName',
+                             js_action_payload clob          path '$.jsActionPayload',
+                             display_sequence number         path '$.displaySequence'
+                         )
+                       ) jt
+                 order by nvl(jt.parent_menu_id, 0), jt.display_sequence, jt.menu_id
+                ```
+        }
+        layout {
+            sequence: 20
+            slot: contentBody
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+
+        column MENU_ID (
+            type: hidden
+            heading {
+                heading: ID
+            }
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: MENU_ID
+                dataType: number
+            }
+        )
+
+        column MENU_LABEL (
+            type: textField
+            heading {
+                heading: Label
+            }
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: MENU_LABEL
+                dataType: varchar2
+            }
+        )
+
+        column TARGET_URL (
+            type: textField
+            heading {
+                heading: Target URL
+            }
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: TARGET_URL
+                dataType: varchar2
+            }
+        )
+
+        column ICON_CLASS (
+            type: textField
+            heading {
+                heading: Icon
+            }
+            layout {
+                sequence: 40
+            }
+            source {
+                databaseColumn: ICON_CLASS
+                dataType: varchar2
+            }
+        )
+
+        column CSS_CLASS (
+            type: textField
+            heading {
+                heading: CSS Class
+            }
+            layout {
+                sequence: 50
+            }
+            source {
+                databaseColumn: CSS_CLASS
+                dataType: varchar2
+            }
+        )
+
+        column JS_ACTION_NAME (
+            type: textField
+            heading {
+                heading: JS Action
+            }
+            layout {
+                sequence: 60
+            }
+            source {
+                databaseColumn: JS_ACTION_NAME
+                dataType: varchar2
+            }
+        )
+
+        column DISPLAY_SEQUENCE (
+            type: textField
+            heading {
+                heading: Sequence
+            }
+            layout {
+                sequence: 70
+            }
+            source {
+                databaseColumn: DISPLAY_SEQUENCE
+                dataType: number
+            }
+        )
+
+        savedReport primary-report (
+            visibility: primaryDefault
+            name: Primary Report
+        )
+
+    )
+
+)
