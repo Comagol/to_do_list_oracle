@@ -1,7 +1,7 @@
-page 10 (
-    name: Menu Admin
-    alias: MENU-ADMIN
-    title: Menu Admin
+page 20 (
+    name: Security Access
+    alias: SECURITY-ACCESS
+    title: Security & Access
     appearance {
         pageTemplate: @/standard
         templateOptions: #DEFAULT#
@@ -16,8 +16,8 @@ page 10 (
     }
 
     region page-header (
-        name: Menu Admin
-        title: Menu Administration
+        name: Security Access
+        title: Security & Access
         type: staticContent
         layout {
             sequence: 10
@@ -29,12 +29,12 @@ page 10 (
         }
     )
 
-    region menu-entries-ig (
-        name: Navigation Menu Entries
+    region user-role-ig (
+        name: User Role Assignments
         type: interactiveGrid
         source {
             location: localDatabase
-            tableName: POC_NAVIGATION_MENU
+            tableName: POC_APP_USER_ROLE
         }
         layout {
             sequence: 20
@@ -77,318 +77,7 @@ page 10 (
                 }
             )
             displayColumn (
-                column: @PARENT_MENU_ID
-                layout {
-                    sequence: 20
-                }
-            )
-            displayColumn (
-                column: @MENU_LABEL
-                layout {
-                    sequence: 30
-                }
-            )
-            displayColumn (
-                column: @TARGET_URL
-                layout {
-                    sequence: 40
-                }
-            )
-            displayColumn (
-                column: @ICON_CLASS
-                layout {
-                    sequence: 50
-                }
-            )
-            displayColumn (
-                column: @CSS_CLASS
-                layout {
-                    sequence: 60
-                }
-            )
-            displayColumn (
-                column: @JS_ACTION_NAME
-                layout {
-                    sequence: 70
-                }
-            )
-            displayColumn (
-                column: @JS_ACTION_PAYLOAD
-                layout {
-                    sequence: 80
-                }
-            )
-            displayColumn (
-                column: @DISPLAY_SEQUENCE
-                layout {
-                    sequence: 90
-                }
-            )
-            displayColumn (
-                column: @IS_ACTIVE
-                layout {
-                    sequence: 100
-                }
-            )
-            displayColumn (
-                column: @VALID_FROM
-                layout {
-                    sequence: 110
-                }
-            )
-            displayColumn (
-                column: @VALID_TO
-                layout {
-                    sequence: 120
-                }
-            )
-        )
-
-        column APEX$ROW_SELECTOR (
-            type: rowSelector
-            layout {
-                sequence: 1
-            }
-        )
-
-        column APEX$ROW_ACTION (
-            type: actionsMenu
-            layout {
-                sequence: 2
-            }
-        )
-
-        column MENU_ID (
-            type: hidden
-            source {
-                databaseColumn: MENU_ID
-                dataType: number
-                primaryKey: true
-            }
-            layout {
-                sequence: 10
-            }
-        )
-
-        column PARENT_MENU_ID (
-            type: numberField
-            heading {
-                heading: Parent
-            }
-            layout {
-                sequence: 20
-            }
-            source {
-                databaseColumn: PARENT_MENU_ID
-                dataType: number
-            }
-        )
-
-        column MENU_LABEL (
-            type: textField
-            heading {
-                heading: Label
-            }
-            layout {
-                sequence: 30
-            }
-            source {
-                databaseColumn: MENU_LABEL
-                dataType: varchar2
-            }
-            validation {
-                maxLength: 200
-            }
-        )
-
-        column TARGET_URL (
-            type: textField
-            heading {
-                heading: Target URL
-            }
-            layout {
-                sequence: 40
-            }
-            source {
-                databaseColumn: TARGET_URL
-                dataType: varchar2
-            }
-            validation {
-                maxLength: 2000
-            }
-        )
-
-        column ICON_CLASS (
-            type: textField
-            heading {
-                heading: Icon Class
-            }
-            layout {
-                sequence: 50
-            }
-            source {
-                databaseColumn: ICON_CLASS
-                dataType: varchar2
-            }
-            validation {
-                maxLength: 200
-            }
-        )
-
-        column CSS_CLASS (
-            type: textField
-            heading {
-                heading: CSS Class
-            }
-            layout {
-                sequence: 60
-            }
-            source {
-                databaseColumn: CSS_CLASS
-                dataType: varchar2
-            }
-            validation {
-                maxLength: 200
-            }
-        )
-
-        column JS_ACTION_NAME (
-            type: textField
-            heading {
-                heading: JS Action
-            }
-            layout {
-                sequence: 70
-            }
-            source {
-                databaseColumn: JS_ACTION_NAME
-                dataType: varchar2
-            }
-            validation {
-                maxLength: 128
-            }
-        )
-
-        column JS_ACTION_PAYLOAD (
-            type: textarea
-            heading {
-                heading: JS Payload
-            }
-            layout {
-                sequence: 80
-            }
-            source {
-                databaseColumn: JS_ACTION_PAYLOAD
-                dataType: clob
-            }
-        )
-
-        column DISPLAY_SEQUENCE (
-            type: numberField
-            heading {
-                heading: Sequence
-            }
-            layout {
-                sequence: 90
-            }
-            source {
-                databaseColumn: DISPLAY_SEQUENCE
-                dataType: number
-            }
-        )
-
-        column IS_ACTIVE (
-            type: textField
-            heading {
-                heading: Active
-            }
-            layout {
-                sequence: 100
-            }
-            source {
-                databaseColumn: IS_ACTIVE
-                dataType: varchar2
-            }
-        )
-
-        column VALID_FROM (
-            type: datePicker
-            heading {
-                heading: Valid From
-            }
-            layout {
-                sequence: 110
-            }
-            source {
-                databaseColumn: VALID_FROM
-                dataType: timestamp
-            }
-        )
-
-        column VALID_TO (
-            type: datePicker
-            heading {
-                heading: Valid To
-            }
-            layout {
-                sequence: 120
-            }
-            source {
-                databaseColumn: VALID_TO
-                dataType: timestamp
-            }
-        )
-    )
-
-    region menu-role-ig (
-        name: Menu Role Mapping
-        type: interactiveGrid
-        source {
-            location: localDatabase
-            tableName: POC_NAV_MENU_ROLE
-        }
-        layout {
-            sequence: 30
-            slot: body
-        }
-        appearance {
-            template: @/standard
-            templateOptions: #DEFAULT#
-        }
-        edit {
-            enabled: true
-            allowedOperations: [
-                update
-                add
-                delete
-            ]
-        }
-        toolbar {
-            controls: [
-                searchField
-                actionsMenu
-                saveButton
-            ]
-        }
-
-        savedReport PRIMARY (
-            name: Primary
-            visibility: primary
-            view {
-                default: grid
-            }
-            singleRowView {
-                displayedColumns: true
-            }
-
-            displayColumn (
-                column: @APEX$ROW_ACTION
-                layout {
-                    sequence: 2
-                }
-            )
-            displayColumn (
-                column: @MENU_ID
+                column: @APP_USER
                 layout {
                     sequence: 20
                 }
@@ -433,10 +122,10 @@ page 10 (
             }
         )
 
-        column MENU_ROLE_ID (
+        column USER_ROLE_ID (
             type: hidden
             source {
-                databaseColumn: MENU_ROLE_ID
+                databaseColumn: USER_ROLE_ID
                 dataType: number
                 primaryKey: true
             }
@@ -445,17 +134,20 @@ page 10 (
             }
         )
 
-        column MENU_ID (
-            type: numberField
+        column APP_USER (
+            type: textField
             heading {
-                heading: Menu ID
+                heading: App User
             }
             layout {
                 sequence: 20
             }
             source {
-                databaseColumn: MENU_ID
-                dataType: number
+                databaseColumn: APP_USER
+                dataType: varchar2
+            }
+            validation {
+                maxLength: 255
             }
         )
 
@@ -517,6 +209,171 @@ page 10 (
                 dataType: timestamp
             }
         )
+    )
+
+    region js-allowlist-ig (
+        name: JS Action Allowlist
+        type: interactiveGrid
+        source {
+            location: localDatabase
+            tableName: POC_NAV_ALLOWED_JS_ACTION
+        }
+        layout {
+            sequence: 30
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+        edit {
+            enabled: true
+            allowedOperations: [
+                update
+                add
+                delete
+            ]
+        }
+        toolbar {
+            controls: [
+                searchField
+                actionsMenu
+                saveButton
+            ]
+        }
+
+        savedReport PRIMARY (
+            name: Primary
+            visibility: primary
+            view {
+                default: grid
+            }
+            singleRowView {
+                displayedColumns: true
+            }
+
+            displayColumn (
+                column: @APEX$ROW_ACTION
+                layout {
+                    sequence: 2
+                }
+            )
+            displayColumn (
+                column: @ACTION_NAME
+                layout {
+                    sequence: 10
+                }
+            )
+            displayColumn (
+                column: @IS_ACTIVE
+                layout {
+                    sequence: 20
+                }
+            )
+            displayColumn (
+                column: @DESCRIPTION
+                layout {
+                    sequence: 30
+                }
+            )
+        )
+
+        column APEX$ROW_SELECTOR (
+            type: rowSelector
+            layout {
+                sequence: 1
+            }
+        )
+
+        column APEX$ROW_ACTION (
+            type: actionsMenu
+            layout {
+                sequence: 2
+            }
+        )
+
+        column ACTION_NAME (
+            type: textField
+            heading {
+                heading: Action Name
+            }
+            layout {
+                sequence: 10
+            }
+            source {
+                databaseColumn: ACTION_NAME
+                dataType: varchar2
+                primaryKey: true
+            }
+            validation {
+                maxLength: 128
+            }
+        )
+
+        column IS_ACTIVE (
+            type: textField
+            heading {
+                heading: Active
+            }
+            layout {
+                sequence: 20
+            }
+            source {
+                databaseColumn: IS_ACTIVE
+                dataType: varchar2
+            }
+        )
+
+        column DESCRIPTION (
+            type: textarea
+            heading {
+                heading: Description
+            }
+            layout {
+                sequence: 30
+            }
+            source {
+                databaseColumn: DESCRIPTION
+                dataType: varchar2
+            }
+            validation {
+                maxLength: 500
+            }
+        )
+    )
+
+    region click-audit-ir (
+        name: Menu Click Audit Log
+        type: interactiveReport
+        source {
+            location: localDatabase
+            type: sqlQuery
+            sqlQuery:
+                ```sql
+                select c.click_log_id,
+                       c.menu_id,
+                       m.menu_label,
+                       c.app_user,
+                       c.app_session,
+                       c.page_id,
+                       c.click_ts,
+                       c.request_context,
+                       c.client_ip,
+                       c.user_agent
+                  from poc_nav_menu_click_log c
+                  join poc_navigation_menu m on m.menu_id = c.menu_id
+                 order by c.click_ts desc
+                ```
+        }
+        layout {
+            sequence: 40
+            slot: body
+        }
+        appearance {
+            template: @/standard
+            templateOptions: #DEFAULT#
+        }
+
     )
 
 )

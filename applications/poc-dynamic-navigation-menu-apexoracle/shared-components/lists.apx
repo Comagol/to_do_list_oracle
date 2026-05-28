@@ -92,4 +92,19 @@ list navigation-menu (
         }
     )
 
+    entry security-access (
+        label: Security & Access
+        icon {
+            imageIconCssClasses: fa-shield
+        }
+        layout {
+            sequence: 30
+        }
+        link {
+            target: {
+                page: 20
+            }
+        }
+    )
+
 )

@@ -73,10 +73,6 @@ page 1 (
             templateOptions: #DEFAULT#
         }
 
-        savedReport primary-report (
-            visibility: primaryDefault
-        )
-
     )
 
 )
