@@ -12,6 +12,7 @@ page 10 (
     security {
         pageAccessProtection: argumentsMustHaveChecksum
         formAutoComplete: false
+        authorizationScheme: mustNotBePublicUser
     }
 
     region page-header (
@@ -37,7 +38,7 @@ page 10 (
         }
         layout {
             sequence: 20
-            slot: contentBody
+            slot: body
         }
         appearance {
             template: @/standard
@@ -47,39 +48,27 @@ page 10 (
             enabled: true
             allowedOperations: [
                 update
-                insert
+                add
                 delete
             ]
         }
         toolbar {
             controls: [
                 searchField
-                actionMenu
+                actionsMenu
                 saveButton
             ]
         }
 
         savedReport PRIMARY (
-            visibility: primaryDefault
+            name: Primary
+            visibility: primary
             view {
                 default: grid
             }
             singleRowView {
                 displayedColumns: true
             }
-
-            displayColumn MENU_ID ()
-            displayColumn PARENT_MENU_ID ()
-            displayColumn MENU_LABEL ()
-            displayColumn TARGET_URL ()
-            displayColumn ICON_CLASS ()
-            displayColumn CSS_CLASS ()
-            displayColumn JS_ACTION_NAME ()
-            displayColumn JS_ACTION_PAYLOAD ()
-            displayColumn DISPLAY_SEQUENCE ()
-            displayColumn IS_ACTIVE ()
-            displayColumn VALID_FROM ()
-            displayColumn VALID_TO ()
         )
 
         column APEX$ROW_SELECTOR (
@@ -90,7 +79,7 @@ page 10 (
         )
 
         column APEX$ROW_ACTION (
-            type: rowAction
+            type: actionsMenu
             layout {
                 sequence: 2
             }
@@ -287,7 +276,7 @@ page 10 (
         }
         layout {
             sequence: 30
-            slot: contentBody
+            slot: body
         }
         appearance {
             template: @/standard
@@ -297,33 +286,27 @@ page 10 (
             enabled: true
             allowedOperations: [
                 update
-                insert
+                add
                 delete
             ]
         }
         toolbar {
             controls: [
                 searchField
-                actionMenu
+                actionsMenu
                 saveButton
             ]
         }
 
         savedReport PRIMARY (
-            visibility: primaryDefault
+            name: Primary
+            visibility: primary
             view {
                 default: grid
             }
             singleRowView {
                 displayedColumns: true
             }
-
-            displayColumn MENU_ROLE_ID ()
-            displayColumn MENU_ID ()
-            displayColumn ROLE_CODE ()
-            displayColumn IS_ACTIVE ()
-            displayColumn VALID_FROM ()
-            displayColumn VALID_TO ()
         )
 
         column APEX$ROW_SELECTOR (
@@ -334,7 +317,7 @@ page 10 (
         )
 
         column APEX$ROW_ACTION (
-            type: rowAction
+            type: actionsMenu
             layout {
                 sequence: 2
             }
